@@ -144,3 +144,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24d5afb796970c949bc20797513be716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InMotion: 0
+  ForceMultiplyer: 3

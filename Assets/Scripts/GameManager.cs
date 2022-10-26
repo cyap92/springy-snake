@@ -117,22 +117,21 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         PauseScreen.SetActive(true);
-        playing = false;
+        Time.timeScale = 0;
     }
 
     public void UnPause()
     {
         PauseScreen.SetActive(false);
-        playing = true;
+        Time.timeScale = 1;
     }
 
     private void Update()
     {
         TimeDisplay.text = "Time: "+(Math.Truncate(levelTime*10)/10);
-        if(playing)
-        {
-            levelTime += Time.deltaTime;
-        }
+
+        levelTime += Time.deltaTime;
+
     }
 }
 

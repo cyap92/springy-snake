@@ -112,6 +112,8 @@ public class GameManager : MonoBehaviour
         player.gameObject.SetActive(false);
         PauseButton.SetActive(false);
         TimeDisplay.gameObject.SetActive(false);
+        PauseScreen.gameObject.SetActive(false);
+        playing = false;
     }
 
     public void Pause()

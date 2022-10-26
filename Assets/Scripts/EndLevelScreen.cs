@@ -8,7 +8,6 @@ public class EndLevelScreen : MonoBehaviour
 {
     [SerializeField] private Text levelNameDisplay;
     [SerializeField] private Text timeDisplay;
-
     [SerializeField] private Image[] starImages;
     [SerializeField] private Sprite starSprite;
 

@@ -9,13 +9,21 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] Camera Camera;
+    //Level Prefabs
     [SerializeField] LevelPair[] Levels;
+    //prefab of the player gameobject
     [SerializeField] GameObject playerPrefab;
+    //level select ui
     [SerializeField] GameObject LevelSelect;
+    //title screen ui
     [SerializeField] GameObject TitleScreen;
+    //pause screen pop up
     [SerializeField] GameObject PauseScreen;
+    //in game pause button 
     [SerializeField] GameObject PauseButton;
+    //level complete pop up
     [SerializeField] EndLevelScreen EndLevelScreen;
+    //in game time display
     [SerializeField] Text TimeDisplay;
 
     private float levelTime;
@@ -46,6 +54,8 @@ public class GameManager : MonoBehaviour
         PauseScreen.SetActive(false);
     }
 
+    //initialize game objects for level
+    //id must match id in "Levels"
     public void InitLevel(string id)
     {
         GameObject currentLevelGameObject;
@@ -78,6 +88,7 @@ public class GameManager : MonoBehaviour
         Debug.LogError("Level not found for id: " + id);
     }
 
+    //On level completed, player reached goal
     public void CompleteLevel()
     {
         playing = false;
@@ -97,7 +108,6 @@ public class GameManager : MonoBehaviour
         EndLevelScreen.Open(stars, levelTime,currentLevelName);
     }
  
-
     public void DismissTitleScreen()
     {
         TitleScreen.SetActive(false);
@@ -108,8 +118,8 @@ public class GameManager : MonoBehaviour
     {
         LevelSelect.SetActive(true);
         EndLevelScreen.gameObject.SetActive(false);
-        currentLevel.gameObject.SetActive(false);
-        player.gameObject.SetActive(false);
+        Destroy(currentLevel.gameObject);
+        Destroy(player.gameObject);
         PauseButton.SetActive(false);
         TimeDisplay.gameObject.SetActive(false);
         PauseScreen.gameObject.SetActive(false);
@@ -130,6 +140,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //display level time rounded to tenths of a second
         TimeDisplay.text = "Time: "+(Math.Truncate(levelTime*10)/10);
 
         levelTime += Time.deltaTime;
@@ -137,6 +148,7 @@ public class GameManager : MonoBehaviour
     }
 }
 
+//struct to hold level prefabs and level id for instantiation
 [Serializable]
 public struct LevelPair
 {

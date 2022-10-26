@@ -8,22 +8,29 @@ public class Player : MonoBehaviour
     private Camera cam;
     private Rigidbody2D rigidBody;
 
+    //is the player moving, don't allow player to interact if player is moving
     public bool InMotion = false;
 
     private bool dragging;
+    //starting mouse position of a drag
     private Vector2 startPos;
+    //ending mouse position of a drag
     private Vector2 endPos;
     private SpriteRenderer spriteRenderer;
 
+    //multiplier for the force applied to the player on launch
     [SerializeField] private float ForceMultiplyer = 2;
+    //minimum velocity before clamped to zero and force the player to stop
     [SerializeField] private float VelocityMin = .001f;
+    //maximum magnitude of the launch vector
     [SerializeField] private float maxPower = 1000;
-    [SerializeField] private GameObject aimingArrow;
 
+    [SerializeField] private GameObject aimingArrow;
     [SerializeField] private Sprite snakeCoiledSprite;
     [SerializeField] private Sprite snakeFlyingSprite;
 
     [SerializeField] private Vector3 aimingArrowStartingScale;
+    //scale factor for the aiming arrow in relation to the magnitude of the launch vector
     [SerializeField] private float aimingArrowMagnitudeScaleFactor;
 
     private Vector2 launchPowerVector;
@@ -65,6 +72,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //calculate the launch vector and adjust the aiming arrow visual
         if (dragging)
         {
             endPos = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -76,7 +84,7 @@ public class Player : MonoBehaviour
             aimingArrow.transform.localScale = new Vector3(aimingArrowStartingScale.x + launchPowerVector.magnitude * aimingArrowMagnitudeScaleFactor, aimingArrowStartingScale.y + launchPowerVector.magnitude * aimingArrowMagnitudeScaleFactor, aimingArrowStartingScale.z + launchPowerVector.magnitude * aimingArrowMagnitudeScaleFactor);
             aimingArrow.GetComponent<SpriteRenderer>().color = new Color(1, 1-launchPowerVector.magnitude / maxPower, 1-launchPowerVector.magnitude / maxPower);
         }
-
+        //player has come to rest and they can interact again
         if (InMotion && rigidBody.velocity.magnitude <=VelocityMin)
         {
             rigidBody.velocity = Vector3.zero;
@@ -84,6 +92,7 @@ public class Player : MonoBehaviour
             spriteRenderer.sprite = snakeCoiledSprite;
             transform.rotation = Quaternion.identity;
         }
+        //player is in motion
         else if (!InMotion && rigidBody.velocity.magnitude > VelocityMin)
         {
             spriteRenderer.sprite = snakeFlyingSprite;
@@ -98,6 +107,8 @@ public class Player : MonoBehaviour
             InMotion = true;
         }
     }
+
+    //reset player to starting location
     private void Reset()
     {
         transform.rotation = Quaternion.identity;
@@ -106,15 +117,17 @@ public class Player : MonoBehaviour
         transform.position = GameManager.Instance.CurrentLevel.PlayerStartingPosition;
     }
 
+    //detect if player leaves playable area and then reset
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log(collision.tag);
+        //Debug.Log(collision.tag);
         if (collision.tag == "Boundary")
         {
             Reset();
         }
     }
 
+    //detect if player reached goal area
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Goal")
